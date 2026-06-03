@@ -1,0 +1,36 @@
+{
+  "profileName": "apis",
+  "moduleName": "tests",
+  "fields": {
+    "user": {
+      "type": "objectId",
+      "required": true,
+      "requiredMessage": "User reference is mandatory.",
+      "ref": "User"
+    },
+    "totalAmount": {
+      "type": "number",
+      "required": true,
+      "requiredMessage": "Order total must be specified."
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "requiredMessage": "Status (e.g., 'Pending', 'Shipped') is required.",
+      "unique": false
+    },
+    "trackingNumber": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "isPaid": {
+      "type": "boolean",
+      "required": true
+    },
+    "orderDate": {
+      "type": "date",
+      "required": false
+    }
+  }
+}

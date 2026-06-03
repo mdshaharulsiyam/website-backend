@@ -1,0 +1,74 @@
+2025-02-03 00:02:01 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 00:04:02 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 00:05:18 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 02:12:44 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 02:26:40 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 02:31:48 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/procure_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-03 02:33:18 [ERROR]: TypeError: Cannot read properties of undefined (reading 'statusCode')
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/procure_backend/src/utils/globalErrorHandler.ts:98:30)
+    at /home/shaharulsiyam/Desktop/project/backend/procure_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-02-06 00:08:58 [ERROR]: Error: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.header (/home/shaharulsiyam/Desktop/project/backend/event_backend/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/event_backend/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/shaharulsiyam/Desktop/project/backend/event_backend/node_modules/express/lib/response.js:278:15)
+    at ServerResponse.send (/home/shaharulsiyam/Desktop/project/backend/event_backend/node_modules/express/lib/response.js:162:21)
+    at handleDevError (/home/shaharulsiyam/Desktop/project/backend/event_backend/src/utils/globalErrorHandler.ts:17:34)
+    at globalErrorHandler (/home/shaharulsiyam/Desktop/project/backend/event_backend/src/utils/globalErrorHandler.ts:105:9)
+    at /home/shaharulsiyam/Desktop/project/backend/event_backend/src/middleware/asyncWrapper.ts:7:31
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

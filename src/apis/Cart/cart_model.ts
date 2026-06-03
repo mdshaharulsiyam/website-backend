@@ -1,0 +1,34 @@
+import { model, Schema } from "mongoose";
+import { ICart } from "./cart_type";
+
+
+
+const cart_schema = new Schema<ICart>({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "auth",
+    required: [true, "User ID is required"],
+  },
+  product_id: {
+    type: Schema.Types.ObjectId,
+    ref: "product",
+    required: [true, "Product ID is required"],
+  },
+  color: {
+    type: String,
+    default: null,
+  },
+  size: {
+    type: String,
+    default: null,
+  },
+  quantity: {
+    type: Number,
+    required: [true, "Quantity is required"],
+    min: 1,
+    default: 1,
+  }
+});
+cart_schema.index({ user: 1, product_id: 1 }, { unique: true });
+
+export const cart_model = model<ICart>("cart", cart_schema);
