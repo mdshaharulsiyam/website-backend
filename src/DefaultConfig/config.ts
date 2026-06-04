@@ -5,9 +5,10 @@ const config = Object.freeze({
   PORT: process.env.PORT || 5000,
   IP: process.env.IP || "localhost",
   ALLOWED_ORIGIN: [
-    "http://13.229.171.117:5001",
-    "http://13.229.171.117:5002",
-    "http://localhost:5173"
+    // "http://13.229.171.117:5001",
+    // "http://13.229.171.117:5002",
+    "http://localhost:5173",
+    "http://localhost:5174"
   ],
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,
   MAIL_EMAIL: process.env.MAIL_EMAIL,
