@@ -1,11 +1,13 @@
-import { Types } from "mongoose";
 import jwt from "jsonwebtoken";
-import { IAuth } from "../Auth/auth_types";
+import { Types } from "mongoose";
 import auth_model from "../Auth/auth_model";
+import { IAuth } from "../Auth/auth_types";
+import { coupon_model } from "../Coupon/coupon_model";
+import { order_model } from "../Order/order_model";
+import { product_model } from "../Product/product_model";
+import { affiliate_link_model } from "./affiliate_link_model";
 import { referral_order_model } from "./referral_order_model";
 import { withdrawal_request_model } from "./withdrawal_request_model";
-import { affiliate_link_model } from "./affiliate_link_model";
-import { order_model } from "../Order/order_model";
 
 async function generate_link(product_id: string, auth: IAuth) {
   if (!auth.is_affiliate) {
@@ -46,46 +48,100 @@ async function track_click(affiliate_id: string, product_id: string) {
   return { success: true, message: "Click tracked" };
 }
 
-// In a real scenario, this checkout function would also place the standard order.
-// To keep it focused, it assumes order data is provided and creates BOTH the order and referral.
 async function checkout_affiliate(data: any, auth: IAuth) {
-  const { refId, items, delivery_address, payment_method, ...otherOrderFields } = data;
+  const { refId, items, delivery_address, payment_method, coupon, ...otherOrderFields } = data;
 
   if (!refId) {
     throw new Error("Missing affiliate reference ID");
   }
 
-  // Calculate total amount (mock logic assuming items has price and quantity)
-  let total_amount = 0;
-  for (const item of items) {
-    total_amount += item.price * item.quantity;
-    item.total_price = item.price * item.quantity;
+  const product_ids = items.map((item: any) => new Types.ObjectId(item.product));
+  const products = await product_model.find({ _id: { $in: product_ids } });
+
+  let coupon_data: any = null;
+  if (coupon) {
+    coupon_data = await coupon_model.findOne({ name: coupon });
+    if (!coupon_data) {
+      throw new Error("Invalid coupon code");
+    }
   }
-  
-  const final_amount = total_amount - (data.discount || 0);
+
+  let total_amount = 0;
+  const updated_items = [];
+  const stock_promises = [];
+
+  for (const item of items) {
+    const product = products.find((p: any) => p._id.toString() === item.product.toString());
+    if (!product) {
+      throw new Error(`Product not found for id ${item.product}`);
+    }
+
+    const price = product.price - (product.price * (product.discount || 0)) / 100;
+    const total_price = price * item.quantity;
+    total_amount += total_price;
+
+    updated_items.push({
+      product: item.product,
+      name: product.name,
+      price: price,
+      total_price: total_price,
+      quantity: item.quantity,
+      size: item.size || null,
+      color: item.color || null,
+    });
+
+    stock_promises.push(
+      product_model.updateOne({ _id: item.product }, { $inc: { stock: -item.quantity } })
+    );
+  }
+
+  let final_amount = total_amount;
+  let discount_amount = 0;
+
+  if (coupon_data) {
+    discount_amount = (total_amount * (coupon_data.percentage || 0)) / 100;
+    final_amount = total_amount - discount_amount;
+    await coupon_model.updateOne({ name: coupon }, { $inc: { total_available: -1 } });
+  }
+
+  await Promise.all(stock_promises);
 
   // 1. Create standard order
   const order = await order_model.create({
     user: auth._id,
-    items,
+    items: updated_items,
     delivery_address,
     payment_method,
     total_amount,
     final_amount,
+    coupon: coupon_data ? coupon_data.name : null,
+    coupon_applied: !!coupon_data,
+    discount: discount_amount,
     ...otherOrderFields
   });
 
   // 2. Calculate commission (4% of final_amount)
   const commission_amount = (final_amount * 4) / 100;
 
-  // 3. Create ReferralOrder as Pending
+  // 3. Create ReferralOrder as Approved (auto-approved for now)
   const referral_order = await referral_order_model.create({
     order_id: order._id,
     affiliate_id: refId,
     customer_id: auth._id,
     commission_amount,
-    payment_status: "Pending"
+    payment_status: "Approved"
   });
+
+  // Auto-approve: add commission to affiliate's balance
+  await auth_model.updateOne(
+    { _id: refId },
+    {
+      $inc: {
+        total_earnings: commission_amount,
+        current_balance: commission_amount
+      }
+    }
+  );
 
   return {
     success: true,
@@ -141,7 +197,7 @@ async function admin_get_referral_orders() {
     .populate("customer_id", "name email")
     .populate("order_id", "final_amount total_amount")
     .sort({ createdAt: -1 });
-    
+
   return {
     success: true,
     message: "Referral orders fetched",
@@ -166,11 +222,11 @@ async function admin_update_referral_order(id: string, status: "Pending" | "Appr
   if (status === "Approved") {
     await auth_model.updateOne(
       { _id: referral.affiliate_id },
-      { 
-        $inc: { 
+      {
+        $inc: {
           total_earnings: referral.commission_amount,
           current_balance: referral.commission_amount
-        } 
+        }
       }
     );
   }
