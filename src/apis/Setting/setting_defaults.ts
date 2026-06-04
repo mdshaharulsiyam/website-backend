@@ -72,4 +72,6 @@ export const DEFAULT_WEB_SETTING = Object.freeze({
   confirm_order_text: "",
   delivery_fee_in_dhaka: 70,
   delivery_fee_outside_dhaka: 130,
+  affiliate_percentage: 4,
+  affiliate_policy: "",
 });

@@ -79,6 +79,7 @@ const normalizeWebSettingPayload = (payload: any): Partial<IWebsiteSetting> => {
     "address",
     "delivery_and_returns",
     "confirm_order_text",
+    "affiliate_policy",
   ];
 
   stringFields.forEach((key) => {
@@ -154,6 +155,7 @@ const normalizeWebSettingPayload = (payload: any): Partial<IWebsiteSetting> => {
   const numberFields: Array<keyof IWebsiteSetting> = [
     "delivery_fee_in_dhaka",
     "delivery_fee_outside_dhaka",
+    "affiliate_percentage",
   ];
 
   numberFields.forEach((key) => {
