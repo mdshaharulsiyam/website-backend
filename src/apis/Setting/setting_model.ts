@@ -78,6 +78,8 @@ const website_setting_schema = new Schema<IWebsiteSetting>(
     confirm_order_text: { type: String, default: "" },
     delivery_fee_in_dhaka: { type: Number, default: 70 },
     delivery_fee_outside_dhaka: { type: Number, default: 130 },
+    affiliate_percentage: { type: Number, default: 4 },
+    affiliate_policy: { type: String, default: "" },
   },
   { timestamps: true },
 );

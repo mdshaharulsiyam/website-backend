@@ -25,17 +25,17 @@ async function create_withdrawal(req: Request, res: Response) {
 }
 
 async function get_affiliate_orders(req: Request, res: Response) {
-  const result = await affiliate_service.get_affiliate_orders(req.user as IAuth);
+  const result = await affiliate_service.get_affiliate_orders(req.user as IAuth, req.query);
   sendResponse(res, HttpStatus.SUCCESS, result);
 }
 
 async function get_withdrawals(req: Request, res: Response) {
-  const result = await affiliate_service.get_withdrawals(req.user as IAuth);
+  const result = await affiliate_service.get_withdrawals(req.user as IAuth, req.query);
   sendResponse(res, HttpStatus.SUCCESS, result);
 }
 
 async function admin_get_referral_orders(req: Request, res: Response) {
-  const result = await affiliate_service.admin_get_referral_orders();
+  const result = await affiliate_service.admin_get_referral_orders(req.query);
   sendResponse(res, HttpStatus.SUCCESS, result);
 }
 
@@ -45,7 +45,7 @@ async function admin_update_referral_order(req: Request, res: Response) {
 }
 
 async function admin_get_withdrawals(req: Request, res: Response) {
-  const result = await affiliate_service.admin_get_withdrawals();
+  const result = await affiliate_service.admin_get_withdrawals(req.query);
   sendResponse(res, HttpStatus.SUCCESS, result);
 }
 

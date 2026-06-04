@@ -79,4 +79,6 @@ export interface IWebsiteSetting extends Document {
   confirm_order_text?: string;
   delivery_fee_in_dhaka?: number;
   delivery_fee_outside_dhaka?: number;
+  affiliate_percentage?: number;
+  affiliate_policy?: string;
 }

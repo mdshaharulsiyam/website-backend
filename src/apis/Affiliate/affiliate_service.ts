@@ -8,6 +8,7 @@ import { product_model } from "../Product/product_model";
 import { affiliate_link_model } from "./affiliate_link_model";
 import { referral_order_model } from "./referral_order_model";
 import { withdrawal_request_model } from "./withdrawal_request_model";
+import { WebsiteSettingModel } from "../Setting/setting_model";
 
 async function generate_link(product_id: string, auth: IAuth) {
   if (!auth.is_affiliate) {
@@ -121,7 +122,10 @@ async function checkout_affiliate(data: any, auth: IAuth) {
   });
 
   // 2. Calculate commission (4% of final_amount)
-  const commission_amount = (final_amount * 4) / 100;
+  const settings = await WebsiteSettingModel.findOne() || { affiliate_percentage: 4 };
+  const affiliate_percentage = settings.affiliate_percentage ?? 4;
+  
+  let commission_amount = (final_amount * affiliate_percentage) / 100;
 
   // 3. Create ReferralOrder as Pending
   const referral_order = await referral_order_model.create({
@@ -159,16 +163,26 @@ async function approve_referral_on_delivery(order_id: string) {
   }
 }
 
-async function get_affiliate_orders(auth: IAuth) {
+async function get_affiliate_orders(auth: IAuth, queryKeys?: any) {
+  const page = queryKeys?.page ? Number(queryKeys.page) : 1;
+  const limit = queryKeys?.limit ? Number(queryKeys.limit) : 10;
+  const skip = (page - 1) * limit;
+
   const orders = await referral_order_model
     .find({ affiliate_id: auth._id })
     .populate("order_id")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await referral_order_model.countDocuments({ affiliate_id: auth._id });
+  const totalPages = Math.ceil(total / limit);
 
   return {
     success: true,
     message: "Affiliate orders fetched",
-    data: orders
+    data: orders,
+    pagination: { page, totalPages, total, limit }
   };
 }
 
@@ -200,27 +214,50 @@ async function create_withdrawal(data: { bkash_number: string, amount: number },
   };
 }
 
-async function get_withdrawals(auth: IAuth) {
-  const withdrawals = await withdrawal_request_model.find({ user_id: auth._id }).sort({ createdAt: -1 });
+async function get_withdrawals(auth: IAuth, queryKeys?: any) {
+  const page = queryKeys?.page ? Number(queryKeys.page) : 1;
+  const limit = queryKeys?.limit ? Number(queryKeys.limit) : 10;
+  const skip = (page - 1) * limit;
+
+  const withdrawals = await withdrawal_request_model
+    .find({ user_id: auth._id })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await withdrawal_request_model.countDocuments({ user_id: auth._id });
+  const totalPages = Math.ceil(total / limit);
+
   return {
     success: true,
     message: "Withdrawals fetched successfully",
-    data: withdrawals
+    data: withdrawals,
+    pagination: { page, totalPages, total, limit }
   };
 }
 
-async function admin_get_referral_orders() {
+async function admin_get_referral_orders(queryKeys?: any) {
+  const page = queryKeys?.page ? Number(queryKeys.page) : 1;
+  const limit = queryKeys?.limit ? Number(queryKeys.limit) : 20;
+  const skip = (page - 1) * limit;
+
   const orders = await referral_order_model
     .find()
     .populate("affiliate_id", "name email")
     .populate("customer_id", "name email")
     .populate("order_id", "final_amount total_amount")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await referral_order_model.countDocuments();
+  const totalPages = Math.ceil(total / limit);
 
   return {
     success: true,
     message: "Referral orders fetched",
-    data: orders
+    data: orders,
+    pagination: { page, totalPages, total, limit }
   };
 }
 
@@ -257,16 +294,26 @@ async function admin_update_referral_order(id: string, status: "Pending" | "Appr
   };
 }
 
-async function admin_get_withdrawals() {
+async function admin_get_withdrawals(queryKeys?: any) {
+  const page = queryKeys?.page ? Number(queryKeys.page) : 1;
+  const limit = queryKeys?.limit ? Number(queryKeys.limit) : 20;
+  const skip = (page - 1) * limit;
+
   const withdrawals = await withdrawal_request_model
     .find()
     .populate("user_id", "name email current_balance total_earnings")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await withdrawal_request_model.countDocuments();
+  const totalPages = Math.ceil(total / limit);
 
   return {
     success: true,
     message: "Withdrawal requests fetched",
-    data: withdrawals
+    data: withdrawals,
+    pagination: { page, totalPages, total, limit }
   };
 }
 
