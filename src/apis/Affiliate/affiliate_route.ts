@@ -23,6 +23,11 @@ affiliate_router
     verifyToken(config.USER),
     asyncWrapper(affiliate_controller.checkout_affiliate)
   )
+  .get(
+    "/affiliate/orders",
+    verifyToken(config.USER),
+    asyncWrapper(affiliate_controller.get_affiliate_orders)
+  )
   .post(
     "/affiliate/withdraw",
     verifyToken(config.USER),

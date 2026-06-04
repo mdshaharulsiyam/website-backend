@@ -6,6 +6,7 @@ import { product_model } from '../Product/product_model';
 import { product_service } from '../Product/product_service';
 import { order_model } from "./order_model";
 import { IOrderItem } from "./order_type";
+import { affiliate_service } from "../Affiliate/affiliate_service";
 
 const create_order = async (data: any, user_id: string) => {
   const session = await mongoose.startSession();
@@ -185,6 +186,12 @@ const update_delivery_status = async (id: string, delivery_status: string) => {
   );
 
   if (!updated_order) throw new Error("Order not found");
+
+  if (delivery_status === "delivered" || delivery_status === "Delivered") {
+    await affiliate_service.approve_referral_on_delivery(id).catch(err => {
+      console.error("Failed to approve referral order on delivery:", err);
+    });
+  }
 
   return {
     success: true,

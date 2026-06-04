@@ -123,25 +123,14 @@ async function checkout_affiliate(data: any, auth: IAuth) {
   // 2. Calculate commission (4% of final_amount)
   const commission_amount = (final_amount * 4) / 100;
 
-  // 3. Create ReferralOrder as Approved (auto-approved for now)
+  // 3. Create ReferralOrder as Pending
   const referral_order = await referral_order_model.create({
     order_id: order._id,
     affiliate_id: refId,
     customer_id: auth._id,
     commission_amount,
-    payment_status: "Approved"
+    payment_status: "Pending"
   });
-
-  // Auto-approve: add commission to affiliate's balance
-  await auth_model.updateOne(
-    { _id: refId },
-    {
-      $inc: {
-        total_earnings: commission_amount,
-        current_balance: commission_amount
-      }
-    }
-  );
 
   return {
     success: true,
@@ -150,6 +139,36 @@ async function checkout_affiliate(data: any, auth: IAuth) {
       order,
       referral_order
     }
+  };
+}
+
+async function approve_referral_on_delivery(order_id: string) {
+  const referral = await referral_order_model.findOne({ order_id, payment_status: "Pending" });
+  if (referral) {
+    referral.payment_status = "Approved";
+    await referral.save();
+    await auth_model.updateOne(
+      { _id: referral.affiliate_id },
+      {
+        $inc: {
+          total_earnings: referral.commission_amount,
+          current_balance: referral.commission_amount
+        }
+      }
+    );
+  }
+}
+
+async function get_affiliate_orders(auth: IAuth) {
+  const orders = await referral_order_model
+    .find({ affiliate_id: auth._id })
+    .populate("order_id")
+    .sort({ createdAt: -1 });
+
+  return {
+    success: true,
+    message: "Affiliate orders fetched",
+    data: orders
   };
 }
 
@@ -288,6 +307,8 @@ export const affiliate_service = Object.freeze({
   generate_link,
   track_click,
   checkout_affiliate,
+  approve_referral_on_delivery,
+  get_affiliate_orders,
   create_withdrawal,
   get_withdrawals,
   admin_get_referral_orders,
