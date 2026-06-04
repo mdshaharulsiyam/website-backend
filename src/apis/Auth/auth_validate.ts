@@ -40,11 +40,11 @@ const reset_password_validate = z.object({
   body: z.object({
     password: z
       .string({ required_error: "password is required", invalid_type_error: "password should be string" })
-      .min(8, "password should be more then 8 character")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-        "Password must include uppercase, lowercase, number, and special character",
-      ),
+      .min(8, "password should be more then 8 character"),
+    // .regex(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+    //   "Password must include uppercase, lowercase, number, and special character",
+    // ),
     confirm_password: z.string({
       required_error: "confirm password is required",
       invalid_type_error: "confirm password should be string"
@@ -56,11 +56,11 @@ const change_password_validate = z.object({
   body: z.object({
     password: z
       .string({ required_error: "password is required", invalid_type_error: "password should be string" })
-      .min(8, "password should be more then 8 character")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-        "Password must include uppercase, lowercase, number, and special character",
-      ),
+      .min(8, "password should be more then 8 character"),
+    // .regex(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+    //   "Password must include uppercase, lowercase, number, and special character",
+    // ),
     confirm_password: z.string({
       required_error: "confirm password is required",
       invalid_type_error: "confirm password should be string"
@@ -100,11 +100,11 @@ const create_admin_validation = z.object({
       ),
     password: z
       .string({ required_error: "Password is required" })
-      .min(8, "password should be more then 8 character")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-        "Password must include uppercase, lowercase, number, and special character",
-      ),
+      .min(8, "password should be more then 8 character"),
+    // .regex(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+    //   "Password must include uppercase, lowercase, number, and special character",
+    // ),
     confirm_password: z.string({
       required_error: "confirm Password is required"
     }),
