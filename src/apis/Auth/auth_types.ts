@@ -26,6 +26,10 @@ export interface IAuth extends Document {
   documents: string[];
   is_identity_verified: boolean;
   stripe: IStripe;
+  is_affiliate: boolean;
+  total_earnings: number;
+  current_balance: number;
+  withdrawn_amount: number;
   createdAt: Date;
   updatedAt: Date;
 }

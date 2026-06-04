@@ -80,6 +80,7 @@ const update_auth_validation = z.object({
       ).optional(),
     phone: z.string({ required_error: "phone is required" }).optional(),
     name: z.string({ required_error: "name is required" }).optional(),
+    is_affiliate: z.boolean().optional(),
     img: z.array(z.string()).max(1, "maximum 1 image can be upload").optional(),
     documents: z
       .array(z.string())

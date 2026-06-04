@@ -23,6 +23,7 @@ import { upazilas_router } from '../apis/upazilas/upazilas_route';
 import { verification_router } from "../apis/Verification/verification_route";
 import { sendMail } from "../utils/sendMail";
 import asyncWrapper from "./asyncWrapper";
+import { affiliate_router, affiliate_admin_router } from "../apis/Affiliate/affiliate_route";
 
 export const routeMiddleware = (app: Express) => {
   app.use("/uploads", express.static(path.join(__dirname, "../../uploads")));
@@ -65,4 +66,6 @@ export const routeMiddleware = (app: Express) => {
   app.use(upazilas_router);
   app.use(districts_router);
   app.use(divisions_router);
+  app.use(affiliate_router);
+  app.use(affiliate_admin_router);
 };

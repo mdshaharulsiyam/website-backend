@@ -130,6 +130,22 @@ const auth_schema = new Schema<IAuth>(
       type: stripe_schema,
       default: null,
     },
+    is_affiliate: {
+      type: Boolean,
+      default: false,
+    },
+    total_earnings: {
+      type: Number,
+      default: 0,
+    },
+    current_balance: {
+      type: Number,
+      default: 0,
+    },
+    withdrawn_amount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
