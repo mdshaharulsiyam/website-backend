@@ -57,12 +57,12 @@ const auth_schema = new Schema<IAuth>(
           },
           message: "Password must be at most 8 characters long",
         },
-        {
-          validator: function (value: string) {
-            return !value || /[A-Z]/.test(value);
-          },
-          message: "Password must contain at least one uppercase letter",
-        },
+        // {
+        //   validator: function (value: string) {
+        //     return !value || /[A-Z]/.test(value);
+        //   },
+        //   message: "Password must contain at least one uppercase letter",
+        // },
       ],
       default: "",
     },

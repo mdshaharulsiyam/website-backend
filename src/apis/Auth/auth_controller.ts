@@ -113,6 +113,29 @@ async function verify_identity(req: Request, res: Response) {
   sendResponse(res, HttpStatus.SUCCESS, result);
 }
 
+async function create_admin(req: Request, res: Response) {
+  const result = await auth_service.create_admin(req.body);
+  sendResponse(res, HttpStatus.SUCCESS, result);
+}
+
+async function get_all_admins(req: Request, res: Response) {
+  const result = await auth_service.get_all_admins({
+    search: req.query.search as string | undefined,
+    status: req.query.status as string | undefined,
+  });
+  sendResponse(res, HttpStatus.SUCCESS, result);
+}
+
+async function change_role(req: Request, res: Response) {
+  const result = await auth_service.change_role(req.params.id, req.body.role);
+  sendResponse(res, HttpStatus.SUCCESS, result);
+}
+
+async function delete_admin(req: Request, res: Response) {
+  const result = await auth_service.delete_admin(req.params.id);
+  sendResponse(res, HttpStatus.SUCCESS, result);
+}
+
 export const auth_controller = Object.freeze({
   create,
   sing_in,
@@ -124,4 +147,8 @@ export const auth_controller = Object.freeze({
   reset_password,
   change_password,
   verify_identity,
+  create_admin,
+  get_all_admins,
+  change_role,
+  delete_admin,
 });

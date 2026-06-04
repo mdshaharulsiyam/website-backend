@@ -81,6 +81,32 @@ auth_router
     "/auth/block/:id",
     verifyToken(config.ADMIN),
     asyncWrapper(auth_controller.block_auth),
+  )
+
+  .post(
+    "/auth/create-admin",
+    validateRequest(auth_validate.create_admin_validation),
+    verifyToken(config.SUPER_ADMIN),
+    asyncWrapper(auth_controller.create_admin),
+  )
+
+  .get(
+    "/auth/get-all-admins",
+    verifyToken(config.SUPER_ADMIN),
+    asyncWrapper(auth_controller.get_all_admins),
+  )
+
+  .patch(
+    "/auth/change-role/:id",
+    validateRequest(auth_validate.change_role_validation),
+    verifyToken(config.SUPER_ADMIN),
+    asyncWrapper(auth_controller.change_role),
+  )
+
+  .delete(
+    "/auth/delete-admin/:id",
+    verifyToken(config.SUPER_ADMIN),
+    asyncWrapper(auth_controller.delete_admin),
   );
 // , undefined, undefined, async (req: Request) => {
 //   const [category, banner] = await Promise.all([

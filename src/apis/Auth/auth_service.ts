@@ -301,6 +301,97 @@ async function block_auth(id: string) {
   };
 }
 
+async function create_admin(data: { [key: string]: string }) {
+  const { email, password, confirm_password, name } = data;
+
+  if (password !== confirm_password) {
+    throw new Error(`confirm password doesn't match`);
+  }
+
+  const existingUser = await auth_model.findOne({ email });
+
+  if (existingUser) {
+    existingUser.role = "ADMIN";
+    await existingUser.save();
+    return {
+      success: true,
+      message: "Existing user role updated to Admin successfully",
+      data: existingUser,
+    };
+  }
+
+  const newAdmin = await auth_model.create({
+    name,
+    email,
+    password,
+    role: "ADMIN",
+    is_verified: true, // Assuming admins don't need email verification right away or we set it true
+  });
+
+  return {
+    success: true,
+    message: "Admin created successfully",
+    data: newAdmin,
+  };
+}
+
+async function get_all_admins(query: UserListQuery = {}) {
+  const match: Record<string, unknown> = { role: "ADMIN" };
+
+  if (query.status === "Active") match.block = false;
+  if (query.status === "Banned") match.block = true;
+
+  if (query.search) {
+    const search = new RegExp(escapeRegex(query.search), "i");
+    match.$or = [{ name: search }, { email: search }, { phone: search }];
+  }
+
+  const admins = await auth_model
+    .find(match)
+    .select("name email phone img role block is_verified is_identity_verified createdAt updatedAt")
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return {
+    success: true,
+    message: "Admins fetched successfully",
+    data: admins,
+    total: admins.length,
+  };
+}
+
+async function change_role(id: string, role: string) {
+  const result = await auth_model.findOneAndUpdate(
+    { _id: id },
+    { $set: { role } },
+    { new: true }
+  );
+
+  if (!result) {
+    throw new Error("User not found");
+  }
+
+  return {
+    success: true,
+    message: `User role changed to ${role} successfully`,
+    data: result,
+  };
+}
+
+async function delete_admin(id: string) {
+  const result = await auth_model.findByIdAndDelete(id);
+
+  if (!result) {
+    throw new Error("Admin not found");
+  }
+
+  return {
+    success: true,
+    message: "Admin deleted successfully",
+    data: result,
+  };
+}
+
 export const auth_service = Object.freeze({
   sign_up,
   sing_in,
@@ -311,4 +402,8 @@ export const auth_service = Object.freeze({
   verify_identity,
   block_auth,
   reset_password,
+  create_admin,
+  get_all_admins,
+  change_role,
+  delete_admin,
 });
