@@ -25,7 +25,8 @@ const delete_coupon = async (req: Request, res: Response) => {
 const check_coupon = async (req: Request, res: Response) => {
   const result = await coupon_service.check_coupon(
     req?.params?.name,
-    req.body?.product_id,
+    req.body?.items,
+    req.body?.total_amount
   );
 
   sendResponse(res, HttpStatus.SUCCESS, result);

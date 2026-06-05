@@ -21,6 +21,10 @@ const coupon_schema = new Schema<ICoupon>(
       type: Number,
       default: 0,
     },
+    min_spend: {
+      type: Number,
+      default: 0,
+    },
     total_available: {
       type: Number,
       required: [true, "Total available is required"],

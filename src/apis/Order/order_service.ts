@@ -40,6 +40,8 @@ const create_order = async (data: any, user_id: string) => {
         throw new Error("Invalid coupon code");
       }
 
+      let eligible_amount = 0;
+
       const updated_items = items.map((item: IOrderItem) => {
         const product = product_data?.data?.find(
           (p: any) => p._id.toString() === item.product.toString()
@@ -48,26 +50,23 @@ const create_order = async (data: any, user_id: string) => {
         if (!product) {
           throw new Error(`Product not found for id ${item.product}`);
         }
+        
+        const price = product.price_after_discount;
+        const total_price = price * item.quantity;
+        total_amount += total_price;
+
         if (
           coupon_data?.coupon_type == "product"
         ) {
-          if (coupon && !product.coupon.available) {
-            throw new Error(`Coupon is not available`);
-          }
-          if (coupon && product.coupon.coupon_code !== coupon) {
-            throw new Error(`Invalid coupon code`);
-          }
-          if (coupon_data?.total_available == 0) {
-            throw new Error(`Coupon is not available`);
+          if (coupon && product.coupon?.available && product.coupon?.coupon_code === coupon) {
+            eligible_amount += total_price;
           }
         }
+
         stock_promise.push(product_model.updateOne(
           { _id: item.product },
           { $inc: { stock: -item.quantity } }
         ));
-        const price = product.price_after_discount;
-        const total_price = price * item.quantity;
-        total_amount += total_price;
         return {
           product: item.product,
           name: product.name,
@@ -79,6 +78,31 @@ const create_order = async (data: any, user_id: string) => {
         };
       });
 
+      if (coupon_data) {
+        if (total_amount < (coupon_data.min_spend || 0)) {
+          throw new Error(`Minimum spend of ৳${coupon_data.min_spend} is required for this coupon`);
+        }
+        if (coupon_data.total_available <= 0) {
+          throw new Error(`Coupon is not available`);
+        }
+        if (coupon_data.coupon_type === "product" && eligible_amount === 0) {
+          throw new Error(`No eligible products in cart for this coupon`);
+        }
+      }
+
+      let discount = 0;
+      if (coupon_data) {
+         if (coupon_data.coupon_type === "product") {
+           discount = eligible_amount * (coupon_data.percentage / 100);
+         } else {
+           discount = total_amount * (coupon_data.percentage / 100);
+         }
+         
+         if (coupon_data.max_discount && coupon_data.max_discount > 0) {
+           discount = Math.min(discount, coupon_data.max_discount);
+         }
+      }
+
       const order_data = {
         user: user_id,
         items: updated_items,
@@ -86,11 +110,10 @@ const create_order = async (data: any, user_id: string) => {
         delivery_address,
         payment_method,
         ...(coupon_data ? {
-          final_amount: total_amount - total_amount * (coupon_data?.percentage || 0) / 100,
-          // final_amount: total_amount - Math.min(total_amount * (coupon_data?.percentage || 0) / 100, coupon_data?.max_discount || 0),
+          final_amount: total_amount - discount,
           coupon: coupon_data?.name,
           coupon_applied: true,
-          discount: total_amount * (coupon_data?.percentage || 0) / 100
+          discount: discount
         } : {
           final_amount: total_amount,
           coupon: null,
