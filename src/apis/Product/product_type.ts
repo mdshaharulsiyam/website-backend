@@ -21,6 +21,7 @@ interface IProduct extends Document {
   gender?: string;
   user: Types.ObjectId;
   is_deleted?: boolean;
+  weight?: string;
   created_at?: Date;
   updated_at?: Date;
 }

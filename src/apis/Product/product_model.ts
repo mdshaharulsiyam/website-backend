@@ -77,6 +77,7 @@ const product_schema = new Schema<IProduct>(
       ref: "auth",
       required: [true, "User is required"],
     },
+    weight: { type: String, required: false },
   },
   { timestamps: true },
 );
